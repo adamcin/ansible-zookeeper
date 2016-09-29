@@ -5,3 +5,6 @@
 - name: Reload systemctl daemon
   command: systemctl daemon-reload
   when: ansible_service_mgr == 'systemd'
+
+- name: Run zkinit script
+  shell: "sleep 5; {{zookeeper_dir}}/bin/zkCli.sh <{{zookeeper_dir}}/conf/zkinit -server localhost:{{client_port}}"

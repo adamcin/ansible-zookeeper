@@ -9,3 +9,18 @@
 - name: Start zookeeper service
   service: name=zookeeper state=started enabled=yes
   tags: deploy
+
+- name: Build zkinit script
+  lineinfile:
+    dest: "{{zookeeper_dir}}/conf/zkinit"
+    regexp: ' {{ item }} '
+    line: "create {{item}} []"
+    state: present
+    create: yes
+    owner: zookeeper
+    group: zookeeper
+  tags: deploy
+  notify:
+    - Run zkinit script
+  when: zookeeper_chroots is defined
+  with_items: "{{zookeeper_chroots}}"
